@@ -23,7 +23,6 @@ const coinElement = document.getElementById('coin');
 const energyElement = document.getElementById('energyValue');
 const userDisplayName = document.getElementById('userDisplayName');
 
-// Проверка авторизации
 document.addEventListener('DOMContentLoaded', function() {
     currentUser = localStorage.getItem('currentUser');
     
@@ -46,11 +45,49 @@ function initGame() {
     loadGameData();
 }
 
-function openAdmin() {
-    window.location.href = 'admin.html';
+function showMainScreen() {
+    document.getElementById('mainScreen').classList.add('active');
+    document.getElementById('minigamesScreen').classList.remove('active');
+    
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector('[data-tab="main"]').classList.add('active');
 }
 
-// Загрузка данных из Firebase
+function showMinigames() {
+    document.getElementById('mainScreen').classList.remove('active');
+    document.getElementById('minigamesScreen').classList.add('active');
+    
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector('[data-tab="minigames"]').classList.add('active');
+}
+
+function showFarm() {
+    alert('Фарм скоро будет добавлен!');
+    showMainScreen();
+}
+
+function startGame(gameType) {
+    const gameUrls = {
+        'mines': 'mines.html',
+        'plinko': 'https://brainrot-88434.web.app/plinko', 
+        'dice': 'https://brainrot-88434.web.app/dice'
+    };
+    
+    if (gameUrls[gameType]) {
+        window.location.href = gameUrls[gameType];
+    } else {
+        alert('Игра временно недоступна!');
+    }
+}
+
+function startLuckyJet() {
+    window.location.href = 'luckyjet.html';
+}
+
+function goBackToMinigames() {
+    window.location.href = 'game.html';
+}
+
 async function loadGameData() {
     try {
         console.log('Loading data for user:', currentUser);
@@ -64,10 +101,8 @@ async function loadGameData() {
             energy = data.energy || 1000;
             lastUpdateTime = data.lastUpdateTime || Date.now();
             
-            // Восстановление энергии
             restoreEnergyFromTime();
         } else {
-            // Если пользователь не найден (не должен случиться)
             await createNewUser();
         }
         
@@ -82,7 +117,6 @@ async function loadGameData() {
     }
 }
 
-// Создание нового пользователя (на всякий случай)
 async function createNewUser() {
     try {
         await db.collection('users').doc(currentUser).set({
@@ -98,7 +132,6 @@ async function createNewUser() {
     }
 }
 
-// Сохранение данных в Firebase
 async function saveGameData() {
     if (!isDataLoaded || !currentUser) return;
     
@@ -116,7 +149,6 @@ async function saveGameData() {
     }
 }
 
-// Восстановление энергии
 function restoreEnergyFromTime() {
     const currentTime = Date.now();
     const timePassed = currentTime - lastUpdateTime;
@@ -129,13 +161,11 @@ function restoreEnergyFromTime() {
     }
 }
 
-// Обновление интерфейса
 function updateDisplay() {
-    balanceElement.textContent = `Баланс: ${balance}`;
+    balanceElement.textContent = `Brainrot: ${balance}`;
     energyElement.textContent = energy;
 }
 
-// Клик по монете
 coinElement.addEventListener('click', function(event) {
     if (!isDataLoaded || energy <= 0) return;
     
@@ -157,7 +187,6 @@ coinElement.addEventListener('click', function(event) {
     }, 1000);
 });
 
-// Восстановление энергии в реальном времени
 function energyRestoreLoop() {
     if (!isDataLoaded) {
         requestAnimationFrame(energyRestoreLoop);
@@ -178,22 +207,11 @@ function energyRestoreLoop() {
     requestAnimationFrame(energyRestoreLoop);
 }
 
-// Меню
-const menuButtons = document.querySelectorAll('.menu-btn');
-menuButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        menuButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-    });
-});
-
-// Выход
 function logout() {
     localStorage.removeItem('currentUser');
     window.location.href = 'index.html';
 }
 
-// Анимация тряски
 const style = document.createElement('style');
 style.textContent = `
     @keyframes shake {
@@ -204,7 +222,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Сохранение при закрытии
 window.addEventListener('beforeunload', function() {
     if (isDataLoaded) {
         saveGameData();

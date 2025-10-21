@@ -13,7 +13,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Стили для авторизации */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -128,7 +127,6 @@ body {
     color: #dc3545;
 }
 
-/* Стили для игры */
 .game-header {
     position: fixed;
     top: 0;
@@ -307,19 +305,122 @@ body {
     75% { transform: translateX(5px); }
 }
 
-.admin-btn {
-    background: rgba(255, 193, 7, 0.3);
-    color: white;
-    border: 1px solid #ffc107;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-family: 'Arial black';
-    font-size: clamp(0.7rem, 2vw, 0.8rem);
-    margin-right: 10px;
+.minigames-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 80px;
 }
 
-/* Адаптация для очень маленьких экранов */
+.minigames-title {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-family: 'Arial black';
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.game-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    font-family: 'Arial black';
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.game-card:hover::before {
+    left: 100%;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.3);
+    border-color: #ff0000;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.game-icon {
+    font-size: clamp(2.5rem, 8vw, 3rem);
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+}
+
+.game-name {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.game-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    line-height: 1.4;
+    font-family: 'Arial';
+}
+
+.back-btn {
+    background: rgba(255, 0, 0, 0.3);
+    color: white;
+    border: 2px solid #ff0000;
+    padding: 15px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Arial black';
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    display: block;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+    background: rgba(255, 0, 0, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .minigames-container {
+        padding: 15px;
+        margin-top: 70px;
+    }
+    
+    .game-card {
+        padding: 20px;
+    }
+}
+
 @media (max-width: 480px) {
     .auth-box {
         padding: 20px;
@@ -334,7 +435,6 @@ body {
     }
     
     .Title1 {
-
         margin-top: 70px;
         margin-bottom: 15px;
     }
@@ -353,9 +453,28 @@ body {
     .bottom-menu {
         padding: 12px 0;
     }
+    
+    .minigames-title {
+        font-size: 2rem;
+    }
+    
+    .game-card {
+        padding: 15px;
+    }
+    
+    .game-icon {
+        font-size: 2.5rem;
+    }
+    
+    .game-name {
+        font-size: 1.3rem;
+    }
+    
+    .back-btn {
+        padding: 12px 25px;
+    }
 }
 
-/* Адаптация для очень больших экранов */
 @media (min-width: 1200px) {
     .coin {
         width: 220px;
@@ -365,4 +484,21 @@ body {
     .balance {
         font-size: 2.2rem;
     }
+}
+
+.screen {
+    display: none;
+    padding: 20px;
+    min-height: calc(100vh - 70px);
+}
+
+.screen.active {
+    display: block;
+}
+
+.dollar {
+    background-color: gold;
+    background-image: url('dollar-icon.png');
+    color: green;
+    font-weight: bold;
 }

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines - BrainRot</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .balance {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .info-label {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .bet-controls {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .bet-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .bet-btn {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .bet-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff0000;
+            color: white;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .quick-bets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .quick-bet-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff0000;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .mines-controls {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .mines-slider {
+            margin-bottom: 15px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .slider-label {
+            color: #ff6b6b;
+        }
+
+        .slider-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .play-btn, .cashout-btn {
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+            color: #000;
+        }
+
+        .play-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #00cc00 0%, #00aa00 100%);
+        }
+
+        .cashout-btn {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+        }
+
+        .cashout-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #cc0000 0%, #aa0000 100%);
+        }
+
+        .play-btn:disabled, .cashout-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border: 2px solid #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell:hover:not(.revealed):not(.mine) {
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .cell.revealed {
+            background: linear-gradient(135deg, #1a3a1a 0%, #0a2a0a 100%);
+            border-color: #00ff00;
+        }
+
+        .cell.mine {
+            background: linear-gradient(135deg, #3a1a1a 0%, #2a0a0a 100%);
+            border-color: #ff0000;
+        }
+
+        .cell.mine::before {
+            content: '💣';
+        }
+
+        .cell.diamond::before {
+            content: '💎';
+        }
+
+        .result-message {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .result-message.win {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 200, 0, 0.2));
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+
+        .result-message.lose {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(200, 0, 0, 0.2));
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+
+        .multiplier-display {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b00 100%);
+            color: #000;
+            padding: 30px 50px;
+            border-radius: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+        }
+
+        .multiplier-display.show {
+            display: block;
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .history {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .history-title {
+            color: #ff6b6b;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .history-items {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .history-item {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .history-item.win {
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+            color: #000;
+        }
+
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <div class="balance">Баланс: <span id="balance">Загрузка</span> BR</div>
+            <button class="back-btn" onclick="goBack()"> Назад</button>
+        </div>
+
+        <div class="game-info">
+            <div class="info-card">
+                <div class="info-label">X</div>
+                <div class="info-value" id="currentMultiplier">1.00x</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">WIN</div>
+                <div class="info-value" id="potentialWin">0 ₿</div>
+            </div>
+        </div>
+
+        <div class="bet-controls">
+            <div class="bet-input-group">
+                <button class="bet-btn" onclick="changeBet(-10)">-10</button>
+                <input type="number" class="bet-input" id="betAmount" value="10" min="10" max="10000000">
+                <button class="bet-btn" onclick="changeBet(10)">+10</button>
+            </div>
+            <div class="quick-bets">
+                <button class="quick-bet-btn" onclick="setQuickBet(50)">50</button>
+                <button class="quick-bet-btn" onclick="setQuickBet(100)">100</button>
+                <button class="quick-bet-btn" onclick="setQuickBet(500)">500</button>
+                <button class="quick-bet-btn" onclick="setQuickBet(1000)">1000</button>
+            </div>
+        </div>
+
+        <div class="mines-controls">
+            <div class="mines-slider">
+                <div class="slider-header">
+                    <span class="slider-label">Количество мин</span>
+                    <span class="slider-value" id="minesValue">3</span>
+                </div>
+                <input type="range" class="slider" id="minesSlider" min="1" max="24" value="3">
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="play-btn" id="playBtn" onclick="startGame()">ИГРАТЬ</button>
+            <button class="cashout-btn" id="cashoutBtn" onclick="cashout()" disabled>ЗАБРАТЬ</button>
+        </div>
+        
+        <div class="game-board" id="gameBoard">
+        </div>
+
+        <div class="history">
+            <div class="history-title">История игр</div>
+            <div class="history-items" id="historyItems">
+            </div>
+        </div>
+    </div>
+
+    <div class="multiplier-display" id="multiplierDisplay"></div>
+
+    <script src="mines.js"></script>
+</body>
+</html>

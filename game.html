@@ -9,28 +9,44 @@
 </head>
 <body>
     <div class="game-header">
-    <div class="user-info">
-        <span id="userDisplayName">Игрок</span>
-        <button onclick="logout()" class="logout-btn">Выйти</button>
-    </div>
-</div>
-
-    <div class="Title1">
-        <h1>COIN</h1>
-    </div>
-    <div class="balance" id="balance">Баланс: 0</div>
-    <div class="coin" id="coin">
-        <img src="coin.png" alt="Coin" onerror="this.style.display='none'">
+        <div class="user-info">
+            <span id="userDisplayName">...</span>
+            <button onclick="logout()" class="logout-btn">Выйти</button>
+        </div>
     </div>
 
-    <nav class="bottom-menu">
-        <button class="menu-btn active" data-tab="menu">КОИН</button>
-        <button class="menu-btn" data-tab="farm">ФАРМ</button>
-        <button class="menu-btn" data-tab="minigames">МИНИ-ИГРЫ</button>
-    </nav>
+    <div id="mainScreen" class="screen active">
+        <div class="Title1">
+            <h1>КОИН</h1>
+        </div>
+        <div class="balance" id="balance">Brainrot: 0</div>
+        <div class="coin" id="coin">
+            <img src="coin.png" alt="Coin" onerror="this.style.display='none'">
+        </div>
 
-    <div class="energy-display" id="energyDisplay">
-        Энергия: <span id="energyValue">1000</span>/1000
+        <nav class="bottom-menu">
+            <button class="menu-btn active" data-tab="main" onclick="showMainScreen()">КОИН</button>
+            <button class="menu-btn" data-tab="minigames" onclick="showMinigames()">МИНИ-ИГРЫ</button>
+            <button class="menu-btn" data-tab="farm" onclick="showFarm()">ФАРМ</button>
+            <button class="menu-btn" data-tab="shop" onclick="showShop()">Shop</button>
+        </nav>
+
+        <div class="energy-display" id="energyDisplay">
+            Энергия: <span id="energyValue">1000</span>/1000
+        </div>
+    </div>
+
+    <div id="minigamesScreen" class="screen">
+        <div class="minigames-container">
+            <h2 class="minigames-title">МИНИ-ИГРЫ</h2>
+            
+            <div class="games-grid">
+                <div class="game-card" onclick="startGame('mines')">
+                    <div class="game-name">Mines</div>
+                </div>
+
+            <button class="back-btn" onclick="showMainScreen()">НАЗАД</button>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>

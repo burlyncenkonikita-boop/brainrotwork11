@@ -29,30 +29,28 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const passwordConfirm = document.getElementById('regPasswordConfirm').value;
 
     if (username.length < 1) {
-        showMessage('Логин должен быть не менее 1 цифры или буквы', 'error');
+        showMessage('Логин должен иметь от 1 символа', 'error');
         return;
     }
     
     if (password.length < 1) {
-        showMessage('Пароль должен быть не менее 1 цифры или буквы', 'error');
+        showMessage('Пароль должен иметь от 1 символа', 'error');
         return;
     }
     
     if (password !== passwordConfirm) {
-        showMessage('Пароли не совпадают', 'error');
+        showMessage('Пароль неподходит', 'error');
         return;
     }
     
     try {
-        // Проверяем, существует ли пользователь
         const userDoc = await db.collection('users').doc(username).get();
         
         if (userDoc.exists) {
-            showMessage('Пользователь с таким логином уже существует', 'error');
+            showMessage('Человек с таким логином уже есть', 'error');
             return;
         }
         
-        // Сохраняем пользователя
         await db.collection('users').doc(username).set({
             username: username,
             password: password,
@@ -62,9 +60,8 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             registeredAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        showMessage('Регистрация успешна!', 'success');
+        showMessage('Регистрация успешна', 'success');
         
-        // Автоматически входим после регистрации
         setTimeout(() => {
             localStorage.setItem('currentUser', username);
             window.location.href = 'game.html';
@@ -100,7 +97,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         
         // Сохраняем в localStorage и переходим в игру
         localStorage.setItem('currentUser', username);
-        showMessage('Вход успешен!', 'success');
+        showMessage('Вход успешен', 'success');
         
         setTimeout(() => {
             window.location.href = 'game.html';
