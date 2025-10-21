@@ -1,12 +1,13 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyCg_IWmGKw-guZTqCEDb_D7foE6lYClVfw",
-    authDomain: "zhsnsjsj-1d4b9.firebaseapp.com",
-    projectId: "zhsnsjsj-1d4b9",
-    storageBucket: "zhsnsjsj-1d4b9.firebasestorage.app",
-    messagingSenderId: "658552522687",
-    appId: "1:658552522687:web:59718f3ae5e72f2323c30a"
+    apiKey: "AIzaSyCiiSuG-XsE73TvTL2lHeIZ1w5PotlUTTY",
+    authDomain: "brainrot-88434.firebaseapp.com",
+    projectId: "brainrot-88434",
+    storageBucket: "brainrot-88434.firebasestorage.app",
+    messagingSenderId: "867519121615",
+    appId: "1:867519121615:web:1e79d21a24776b13170fba"
 };
 
+// Инициализация Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -45,21 +46,30 @@ function initGame() {
     loadGameData();
 }
 
+// Загрузка данных из Firebase
 async function loadGameData() {
     try {
+        console.log('Loading data for user:', currentUser);
         const doc = await db.collection('users').doc(currentUser).get();
         
         if (doc.exists) {
             const data = doc.data();
+            console.log('Loaded from Firebase:', data);
+            
             balance = data.balance || 0;
             energy = data.energy || 1000;
             lastUpdateTime = data.lastUpdateTime || Date.now();
             
+            // Восстановление энергии
             restoreEnergyFromTime();
+        } else {
+            // Если пользователь не найден (не должен случиться)
+            await createNewUser();
         }
         
         updateDisplay();
         isDataLoaded = true;
+        console.log('Game loaded. Balance:', balance, 'Energy:', energy);
         
     } catch (error) {
         console.error('Load error:', error);
@@ -68,6 +78,23 @@ async function loadGameData() {
     }
 }
 
+// Создание нового пользователя (на всякий случай)
+async function createNewUser() {
+    try {
+        await db.collection('users').doc(currentUser).set({
+            username: currentUser,
+            balance: 0,
+            energy: 1000,
+            lastUpdateTime: Date.now(),
+            registeredAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('New user created in Firebase');
+    } catch (error) {
+        console.error('Error creating user:', error);
+    }
+}
+
+// Сохранение данных в Firebase
 async function saveGameData() {
     if (!isDataLoaded || !currentUser) return;
     
@@ -79,11 +106,13 @@ async function saveGameData() {
             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
         
+        console.log('Progress saved to Firebase. Balance:', balance, 'Energy:', energy);
     } catch (error) {
         console.error('Save error:', error);
     }
 }
 
+// Восстановление энергии
 function restoreEnergyFromTime() {
     const currentTime = Date.now();
     const timePassed = currentTime - lastUpdateTime;
@@ -96,11 +125,13 @@ function restoreEnergyFromTime() {
     }
 }
 
+// Обновление интерфейса
 function updateDisplay() {
     balanceElement.textContent = `Brainrot: ${balance}`;
     energyElement.textContent = energy;
 }
 
+// Клик по монете
 coinElement.addEventListener('click', function(event) {
     if (!isDataLoaded || energy <= 0) return;
     
@@ -122,6 +153,7 @@ coinElement.addEventListener('click', function(event) {
     }, 1000);
 });
 
+// Восстановление энергии в реальном времени
 function energyRestoreLoop() {
     if (!isDataLoaded) {
         requestAnimationFrame(energyRestoreLoop);
