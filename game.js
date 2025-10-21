@@ -10,7 +10,14 @@ const firebaseConfig = {
 // Инициализация Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const rewardsData = [
+    50, 100, 115, 145, 150, 180, 200, 220, 225, 250,
+    275, 300, 312, 340, 378, 400, 410, 425, 440, 455,
+    460, 475, 480, 484, 488, 492, 496, 497, 499, 500
+];
 
+let currentDay = 0;
+let lastClaimDate = null;
 let balance = 0;
 let energy = 1000;
 const maxEnergy = 1000;
@@ -226,4 +233,164 @@ window.addEventListener('beforeunload', function() {
     if (isDataLoaded) {
         saveGameData();
     }
+});
+
+function openRewardsModal() {
+    loadRewardsProgress();
+    updateRewardsDisplay();
+    document.getElementById('rewardsModal').classList.add('active');
+}
+
+function closeRewardsModal() {
+    document.getElementById('rewardsModal').classList.remove('active');
+}
+
+function loadRewardsProgress() {
+    const saved = localStorage.getItem('dailyRewards');
+    if (saved) {
+        const data = JSON.parse(saved);
+        currentDay = data.currentDay || 0;
+        lastClaimDate = data.lastClaimDate || null;
+    }
+
+    if (lastClaimDate) {
+        const lastClaim = new Date(lastClaimDate);
+        const today = new Date();
+        const diffTime = Math.abs(today - lastClaim);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays > 1) {
+            // Сброс серии, если пропущен день
+            currentDay = 0;
+        }
+    }
+}
+
+function saveRewardsProgress() {
+    const data = {
+        currentDay: currentDay,
+        lastClaimDate: new Date().toISOString()
+    };
+    localStorage.setItem('dailyRewards', JSON.stringify(data));
+}
+
+function updateRewardsDisplay() {
+    const rewardsList = document.getElementById('rewardsList');
+    const claimBtn = document.getElementById('claimBtn');
+    const currentDayElement = document.getElementById('currentDay');
+    
+    currentDayElement.textContent = currentDay;
+    rewardsList.innerHTML = '';
+    
+    const today = new Date().toDateString();
+    const canClaimToday = lastClaimDate ? new Date(lastClaimDate).toDateString() !== today : true;
+
+    rewardsData.forEach((amount, index) => {
+        const day = index + 1;
+        const rewardItem = document.createElement('div');
+        rewardItem.className = 'reward-item';
+        
+        let status = 'locked';
+        let statusText = 'Заблокировано';
+        
+        if (day <= currentDay) {
+            rewardItem.classList.add('claimed');
+            status = 'claimed';
+            statusText = 'Получено';
+        } else if (day === currentDay + 1 && canClaimToday) {
+            status = 'available';
+            statusText = 'Доступно';
+        } else if (day === currentDay + 1 && !canClaimToday) {
+            status = 'claimed';
+            statusText = 'Уже получено';
+        }
+        
+        if (day > currentDay + 1) {
+            rewardItem.classList.add('locked');
+        }
+        
+        rewardItem.innerHTML = `
+            <div class="reward-day">День ${day}</div>
+            <div class="reward-amount">${amount} BR</div>
+            <div class="reward-status status-${status}">${statusText}</div>
+        `;
+        
+        rewardsList.appendChild(rewardItem);
+    });
+
+    if (currentDay >= rewardsData.length) {
+        claimBtn.textContent = 'Все награды получены!';
+        claimBtn.disabled = true;
+    } else if (!canClaimToday) {
+        claimBtn.textContent = 'Уже получено сегодня';
+        claimBtn.disabled = true;
+    } else {
+        claimBtn.textContent = `Забрать ${rewardsData[currentDay]} BR`;
+        claimBtn.disabled = false;
+    }
+}
+
+function claimReward() {
+    if (currentDay >= rewardsData.length) return;
+    
+    const today = new Date().toDateString();
+    if (lastClaimDate && new Date(lastClaimDate).toDateString() === today) {
+        alert('Вы уже получали награду сегодня!');
+        return;
+    }
+    
+    const rewardAmount = rewardsData[currentDay];
+
+    addCoins(rewardAmount);
+
+    currentDay++;
+
+    saveRewardsProgress();
+
+    updateRewardsDisplay();
+
+    showRewardMessage(rewardAmount);
+}
+
+function showRewardMessage(amount) {
+    const message = document.createElement('div');
+    message.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 215, 0, 0.9);
+        color: #000;
+        padding: 20px 30px;
+        border-radius: 15px;
+        font-family: 'Arial black';
+        font-size: 1.2rem;
+        z-index: 1002;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+    `;
+    message.innerHTML = `
+        <div>Молодец</div>
+        <div>Вы получили ${amount} BR</div>
+    `;
+    
+    document.body.appendChild(message);
+    
+    setTimeout(() => {
+        document.body.removeChild(message);
+    }, 3000);
+}
+
+function addCoins(amount) {
+    console.log(`Added ${amount} coins to balance`);
+}
+
+document.getElementById('rewardsModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeRewardsModal();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadRewardsProgress();
 });

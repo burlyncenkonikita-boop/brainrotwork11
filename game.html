@@ -15,6 +15,24 @@
         </div>
     </div>
 
+    <button class="daily-rewards-btn" onclick="openRewardsModal()">
+    <div class="gift-icon"></div>
+    <div class="btn-text">НАГРАДЫ</div>
+</button>
+
+<div class="rewards-modal" id="rewardsModal">
+    <div class="rewards-content">
+        <button class="close-rewards" onclick="closeRewardsModal()">×</button>
+        <div class="rewards-header">Ежедневные награды</div>
+        <div class="current-streak">Текущая серия: <span id="currentDay">0</span> дней</div>
+        
+        <div class="rewards-list" id="rewardsList">
+        </div>
+        
+        <button class="claim-btn" id="claimBtn" onclick="claimReward()">Забрать сегодняшнюю награду</button>
+    </div>
+</div>
+
     <div id="mainScreen" class="screen active">
         <div class="Title1">
             <h1>КОИН</h1>
