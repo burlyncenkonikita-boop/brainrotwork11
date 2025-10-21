@@ -280,7 +280,7 @@ body {
 }
 
 .energy-display {
-    position: fixed;
+    position: relative;
     bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
@@ -496,9 +496,3 @@ body {
     display: block;
 }
 
-.dollar {
-    background-color: gold;
-    background-image: url('dollar-icon.png');
-    color: green;
-    font-weight: bold;
-}
