@@ -9,6 +9,8 @@ body {
     background: linear-gradient(135deg, #ff0000 0%, #000000 100%);
     color: white;
     min-height: 100vh;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 /* Стили для авторизации */
@@ -32,9 +34,10 @@ body {
 }
 
 .auth-box h1 {
-    color: #ff0000;
+    color: white;
     margin-bottom: 30px;
     text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .tabs {
@@ -55,6 +58,7 @@ body {
     border-radius: 8px;
     font-family: 'Lucida Console';
     transition: all 0.3s ease;
+    font-size: clamp(0.8rem, 3vw, 1rem);
 }
 
 .tab-btn.active {
@@ -147,37 +151,42 @@ body {
 .logout-btn {
     background: rgba(255, 0, 0, 0.3);
     color: white;
-    border: 1px solid #ff0000;
+    border: 2px solid #ff0000;
     padding: 8px 15px;
     border-radius: 20px;
     cursor: pointer;
     font-family: 'Lucida Console';
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
 }
 
-/* Остальные стили игры (без изменений) */
 .Title1 {
     color: white;
     text-align: center;
     margin-top: 80px;
     margin-bottom: 20px;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
 }
 
 .balance {
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 4vw, 2rem);
     color: white;
     margin-bottom: 50px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     background: rgba(255,255,255,0.2);
-    padding: 10px 30px;
+    padding: 15px 40px;
     border-radius: 25px;
     backdrop-filter: blur(10px);
+    font-family: 'lucida console';
     text-align: center;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
 }
 
 .coin {
-    width: 350px;
-    height: 350px;
+    width: clamp(150px, 40vw, 200px);
+    height: clamp(150px, 40vw, 200px);
     border-radius: 100%;
     background: white;
     border: 6px solid #ff0000;
@@ -214,7 +223,7 @@ body {
 
 .click-animation {
     position: absolute;
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 3vw, 1.5rem);
     color: white;
     font-weight: bold;
     animation: floatUp 1s ease-out forwards;
@@ -255,9 +264,9 @@ body {
     border-radius: 25px;
     cursor: pointer;
     font-family: 'Lucida Console';
-    font-size: 1rem;
+    font-size: clamp(0.7rem, 2.5vw, 1rem);
     transition: all 0.3s ease;
-    min-width: 120px;
+    min-width: clamp(80px, 25vw, 120px);
     touch-action: manipulation;
 }
 
@@ -281,11 +290,12 @@ body {
     padding: 12px 20px;
     border-radius: 20px;
     font-family: 'Lucida Console';
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+    max-width: 90%;
 }
 
 @keyframes shake {
@@ -302,6 +312,53 @@ body {
     border-radius: 20px;
     cursor: pointer;
     font-family: 'Lucida Console';
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
     margin-right: 10px;
+}
+
+/* Адаптация для очень маленьких экранов */
+@media (max-width: 480px) {
+    .auth-box {
+        padding: 20px;
+    }
+    
+    .game-header {
+        padding: 10px 15px;
+    }
+    
+    .user-info {
+        gap: 10px;
+    }
+    
+    .Title1 {
+        margin-top: 70px;
+        margin-bottom: 15px;
+    }
+    
+    .balance {
+        margin-bottom: 30px;
+        padding: 12px 25px;
+    }
+    
+    .energy-display {
+        top: 60px;
+        right: 15px;
+        padding: 10px 15px;
+    }
+    
+    .bottom-menu {
+        padding: 12px 0;
+    }
+}
+
+/* Адаптация для очень больших экранов */
+@media (min-width: 1200px) {
+    .coin {
+        width: 220px;
+        height: 220px;
+    }
+    
+    .balance {
+        font-size: 2.2rem;
+    }
 }
