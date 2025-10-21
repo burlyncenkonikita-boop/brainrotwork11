@@ -280,23 +280,20 @@ body {
 }
 
 .energy-display {
-    position: relative;
-    bottom: 120px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    top: 20px;
+    right: 20px;
     background: rgba(255, 255, 255, 0.15);
     color: white;
-    padding: 12px 30px;
+    padding: 12px 20px;
     border-radius: 20px;
-    font-family: 'Arial black';
-    font-size: clamp(0.8rem, 2.5vw, 1rem);
+    font-family: 'lucida console';
+    font-size: 1rem;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 999;
-    max-width: 90%;
-    text-align: center;
-    white-space: nowrap;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 @keyframes shake {
