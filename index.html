@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainRot - Авторизация</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>BRAINROT</h1>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="login">ВХОД</button>
+                <button class="tab-btn" data-tab="register">РЕГИСТРАЦИЯ</button>
+            </div>
+            
+            <!-- Форма входа -->
+            <form id="loginForm" class="auth-form active">
+                <div class="input-group">
+                    <input type="text" id="loginUsername" placeholder="Логин" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" placeholder="Пароль" required>
+                </div>
+                <button type="submit" class="auth-btn">ВОЙТИ</button>
+            </form>
+            
+            <!-- Форма регистрации -->
+            <form id="registerForm" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="regUsername" placeholder="Логин" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="regPassword" placeholder="Пароль" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль" required>
+                </div>
+                <button type="submit" class="auth-btn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </form>
+            
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

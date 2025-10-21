@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainRot Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="game-header">
+        <div class="user-info">
+            <span id="userDisplayName">Игрок</span>
+            <button onclick="logout()" class="logout-btn">Выйти</button>
+        </div>
+    </div>
+
+    <div class="Title1">
+        <h1>БраинРот Коин Work</h1>
+    </div>
+    <div class="balance" id="balance">Brainrot: 0</div>
+    <div class="coin" id="coin">
+        <img src="coin.png" alt="Coin" onerror="this.style.display='none'">
+    </div>
+
+    <nav class="bottom-menu">
+        <button class="menu-btn active" data-tab="menu">МЕНЮ</button>
+        <button class="menu-btn" data-tab="farm">ФАРМ</button>
+        <button class="menu-btn" data-tab="minigames">МИНИ-ИГРЫ</button>
+    </nav>
+
+    <div class="energy-display" id="energyDisplay">
+        Энергия: <span id="energyValue">1000</span>/1000
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
