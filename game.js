@@ -46,6 +46,10 @@ function initGame() {
     loadGameData();
 }
 
+function openAdmin() {
+    window.location.href = 'admin.html';
+}
+
 // Загрузка данных из Firebase
 async function loadGameData() {
     try {
