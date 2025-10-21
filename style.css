@@ -183,14 +183,14 @@ body {
 }
 
 .coin {
-    width: clamp(150px, 40vw, 200px);
-    height: clamp(150px, 40vw, 200px);
-    border-radius: 100%;
+    width: clamp(180px, 50vw, 250px);
+    height: clamp(180px, 50vw, 250px);
+    border-radius: 50%;
     background: white;
-    border: 6px solid #ff0000;
+    border: 8px solid #ff0000;
     box-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.6),
-        inset 0 0 20px rgba(255,255,255,0.4);
+        0 0 30px rgba(255, 255, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.5);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -200,14 +200,15 @@ body {
     overflow: hidden;
     touch-action: manipulation;
     margin: 0 auto;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .coin:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .coin:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
 }
 
 .coin img {
@@ -217,6 +218,14 @@ body {
     border-radius: 50%;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
     pointer-events: none;
+}
+
+.coin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 30px 0;
 }
 
 .click-animation {
@@ -404,9 +413,17 @@ body {
 }
 
 @media (max-width: 768px) {
-    .games-grid {
-        grid-template-columns: 1fr;
+    .coin {
+        width: clamp(200px, 60vw, 280px);
+        height: clamp(200px, 60vw, 280px);
+        border-width: 10px;
+        margin: 20px auto;
     }
+    
+    .coin:active {
+        transform: scale(0.90);
+    }
+}
     
     .minigames-container {
         padding: 15px;
@@ -482,3 +499,14 @@ body {
         font-size: 2.2rem;
     }
 }
+
+.screen {
+    display: none;
+    padding: 20px;
+    min-height: calc(100vh - 70px);
+}
+
+.screen.active {
+    display: block;
+}
+
