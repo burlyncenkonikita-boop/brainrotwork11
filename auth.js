@@ -1,24 +1,22 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyCg_IWmGKw-guZTqCEDb_D7foE6lYClVfw",
-    authDomain: "zhsnsjsj-1d4b9.firebaseapp.com",
-    projectId: "zhsnsjsj-1d4b9",
-    storageBucket: "zhsnsjsj-1d4b9.firebasestorage.app",
-    messagingSenderId: "658552522687",
-    appId: "1:658552522687:web:59718f3ae5e72f2323c30a"
+    apiKey: "AIzaSyCiiSuG-XsE73TvTL2lHeIZ1w5PotlUTTY",
+    authDomain: "brainrot-88434.firebaseapp.com",
+    projectId: "brainrot-88434",
+    storageBucket: "brainrot-88434.firebasestorage.app",
+    messagingSenderId: "867519121615",
+    appId: "1:867519121615:web:1e79d21a24776b13170fba"
 };
 
+// Инициализация Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // Переключение между вкладками
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-        // Убираем активный класс у всех кнопок
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        // Скрываем все формы
         document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
         
-        // Активируем текущую кнопку и форму
         this.classList.add('active');
         const tabName = this.getAttribute('data-tab');
         document.getElementById(tabName + 'Form').classList.add('active');
@@ -61,7 +59,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         // Сохраняем пользователя
         await db.collection('users').doc(username).set({
             username: username,
-            password: password, // В реальном приложении пароль нужно хэшировать!
+            password: password,
             balance: 0,
             energy: 1000,
             lastUpdateTime: Date.now(),
