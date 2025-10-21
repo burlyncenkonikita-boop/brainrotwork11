@@ -293,3 +293,15 @@ body {
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
 }
+
+.admin-btn {
+    background: rgba(255, 193, 7, 0.3);
+    color: white;
+    border: 1px solid #ffc107;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Lucida Console';
+    font-size: 0.8rem;
+    margin-right: 10px;
+}
