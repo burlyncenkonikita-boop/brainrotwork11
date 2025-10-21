@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Lucida Console', monospace;
+    font-family: 'Arial black', monospace;
     background: linear-gradient(135deg, #ff0000 0%, #000000 100%);
     color: white;
     min-height: 100vh;
@@ -84,7 +84,7 @@ body {
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.5);
     color: white;
-    font-family: 'Lucida Console';
+    font-family: 'Arial black';
     font-size: 1rem;
 }
 
@@ -100,7 +100,7 @@ body {
     color: white;
     border: none;
     border-radius: 10px;
-    font-family: 'Lucida Console';
+    font-family: 'Arial black';
     font-size: 1.1rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -155,7 +155,7 @@ body {
     padding: 8px 15px;
     border-radius: 20px;
     cursor: pointer;
-    font-family: 'Lucida Console';
+    font-family: 'Arial black';
     font-size: clamp(0.7rem, 2vw, 0.8rem);
 }
 
@@ -176,7 +176,7 @@ body {
     padding: 15px 40px;
     border-radius: 25px;
     backdrop-filter: blur(10px);
-    font-family: 'lucida console';
+    font-family: 'Arial black';
     text-align: center;
     max-width: 90%;
     margin-left: auto;
@@ -263,7 +263,7 @@ body {
     padding: 12px 20px;
     border-radius: 25px;
     cursor: pointer;
-    font-family: 'Lucida Console';
+    font-family: 'Arial black';
     font-size: clamp(0.7rem, 2.5vw, 1rem);
     transition: all 0.3s ease;
     min-width: clamp(80px, 25vw, 120px);
@@ -283,19 +283,22 @@ body {
 
 .energy-display {
     position: fixed;
-    top: 70px;
-    right: 20px;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.15);
     color: white;
-    padding: 12px 20px;
+    padding: 12px 30px;
     border-radius: 20px;
-    font-family: 'Lucida Console';
+    font-family: 'Arial black';
     font-size: clamp(0.8rem, 2.5vw, 1rem);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    z-index: 999;
     max-width: 90%;
+    text-align: center;
+    white-space: nowrap;
 }
 
 @keyframes shake {
@@ -311,7 +314,7 @@ body {
     padding: 8px 15px;
     border-radius: 20px;
     cursor: pointer;
-    font-family: 'Lucida Console';
+    font-family: 'Arial black';
     font-size: clamp(0.7rem, 2vw, 0.8rem);
     margin-right: 10px;
 }
@@ -331,6 +334,7 @@ body {
     }
     
     .Title1 {
+
         margin-top: 70px;
         margin-bottom: 15px;
     }

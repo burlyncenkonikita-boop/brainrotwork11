@@ -7,11 +7,9 @@ const firebaseConfig = {
     appId: "1:867519121615:web:1e79d21a24776b13170fba"
 };
 
-// Инициализация Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Переключение между вкладками
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -23,22 +21,20 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
-// Регистрация
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const username = document.getElementById('regUsername').value.trim();
     const password = document.getElementById('regPassword').value;
     const passwordConfirm = document.getElementById('regPasswordConfirm').value;
-    
-    // Валидация
-    if (username.length < 3) {
-        showMessage('Логин должен быть не менее 3 символов', 'error');
+
+    if (username.length < 1) {
+        showMessage('Логин должен быть не менее 1 цифры или буквы', 'error');
         return;
     }
     
-    if (password.length < 4) {
-        showMessage('Пароль должен быть не менее 4 символов', 'error');
+    if (password.length < 1) {
+        showMessage('Пароль должен быть не менее 1 цифры или буквы', 'error');
         return;
     }
     

@@ -131,7 +131,7 @@ function restoreEnergyFromTime() {
 
 // Обновление интерфейса
 function updateDisplay() {
-    balanceElement.textContent = `Brainrot: ${balance}`;
+    balanceElement.textContent = `Баланс: ${balance}`;
     energyElement.textContent = energy;
 }
 
